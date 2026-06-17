@@ -1,0 +1,664 @@
+import psutil
+
+cpu = psutil.cpu_percent()
+memory = psutil.virtual_memory().percent
+
+print(f"CPU Usage: {cpu}%")
+print(f"Memory Usage: {memory}%")
+
+
+#!/bin/bash
+
+echo "CPU Load:"
+uptime
+
+echo "Disk Usage:"
+df -h
+
+echo "Memory Usage:"
+free -m
+
+import requests
+
+url = "http://jenkins-server/job/TestJob/build"
+user = "admin"
+token = "apitoken"
+
+requests.post(url, auth=(user, token))
+
+curl -X POST \
+http://jenkins-server/job/TestJob/build \
+--user admin:apitoken
+
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh './deploy.sh'
+            }
+        }
+    }
+}
+
+node {
+
+    stage('Build') {
+        sh 'mvn clean package'
+    }
+
+    stage('Test') {
+        sh 'mvn test'
+    }
+
+    stage('Deploy') {
+        sh './deploy.sh'
+    }
+}
+
+java -jar agent.jar \
+-jnlpUrl http://jenkins/computer/agent/slave-agent.jnlp \
+-secret xxxxx
+
+#!/bin/bash
+
+mvn clean
+mvn compile
+mvn test
+mvn package
+
+import os
+
+os.system("mvn clean package")
+
+stage('SonarQube Scan') {
+    steps {
+        sh '''
+        mvn sonar:sonar \
+        -Dsonar.host.url=http://sonarqube:9000
+        '''
+    }
+}
+
+mvn sonar:sonar \
+-Dsonar.projectKey=myapp
+
+stage('Quality Gate') {
+    steps {
+        waitForQualityGate abortPipeline: true
+    }
+}
+
+import boto3
+
+s3 = boto3.client('s3')
+
+s3.upload_file(
+    'app.jar',
+    'my-artifacts',
+    'app.jar'
+)
+
+aws s3 cp app.jar \
+s3://my-artifacts/
+
+#!/bin/bash
+
+aws s3 cp \
+s3://my-artifacts/app.jar .
+
+systemctl restart myapp
+
+pipeline {
+ agent any
+
+ stages {
+
+  stage('Build') {
+   steps {
+    sh 'mvn package'
+   }
+  }
+
+  stage('Scan') {
+   steps {
+    sh 'trivy image app'
+   }
+  }
+
+  stage('Deploy') {
+   steps {
+    sh './deploy.sh'
+   }
+  }
+ }
+}
+
+stage('Parallel Tests') {
+
+ parallel {
+
+  stage('Unit Test') {
+   steps {
+    sh 'pytest tests/'
+   }
+  }
+
+  stage('Integration Test') {
+   steps {
+    sh './integration.sh'
+   }
+  }
+ }
+}
+
+terraform init
+terraform validate
+terraform plan
+terraform apply -auto-approve
+
+import subprocess
+
+subprocess.run(["terraform","apply","-auto-approve"])
+
+resource "aws_instance" "web" {
+
+  ami           = "ami-12345"
+  instance_type = "t2.micro"
+
+}
+
+stage('Infrastructure Deploy') {
+
+ steps {
+  sh '''
+  terraform init
+  terraform apply -auto-approve
+  '''
+ }
+}
+
+trivy image myapp:latest
+
+stage('Security Scan') {
+ steps {
+  sh 'trivy image myapp'
+ }
+}
+
+lynis audit system
+
+ACTIVE=$(cat active.txt)
+
+if [ "$ACTIVE" = "blue" ]
+then
+ echo "Deploying Green"
+else
+ echo "Deploying Blue"
+fi
+
+kubectl apply -f canary.yaml
+
+90% -> Stable Version
+10% -> Canary Version
+
+kubectl set image deployment/app \
+app=myapp:v2
+
+kubectl rollout status deployment/app
+
+kubectl rollout undo deployment/app
+
+If an interviewer asks how you implemented these DevOps activities using **Python, Bash, and Shell Scripting**, you can explain them like this.
+
+---
+
+# 1. Managed Linux and Windows Production Servers
+
+### Purpose
+
+Automate server health checks, patching, and administration.
+
+### Python Example
+
+```python
+import psutil
+
+cpu = psutil.cpu_percent()
+memory = psutil.virtual_memory().percent
+
+print(f"CPU Usage: {cpu}%")
+print(f"Memory Usage: {memory}%")
+```
+
+### Bash Example
+
+```bash
+#!/bin/bash
+
+echo "CPU Load:"
+uptime
+
+echo "Disk Usage:"
+df -h
+
+echo "Memory Usage:"
+free -m
+```
+
+---
+
+# 2. Jenkins Fundamentals - Job Automation
+
+### Python Script Triggering Jenkins Job
+
+```python
+import requests
+
+url = "http://jenkins-server/job/TestJob/build"
+user = "admin"
+token = "apitoken"
+
+requests.post(url, auth=(user, token))
+```
+
+### Bash Script
+
+```bash
+curl -X POST \
+http://jenkins-server/job/TestJob/build \
+--user admin:apitoken
+```
+
+---
+
+# 3. Jenkins Declarative Pipeline
+
+```groovy
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh './deploy.sh'
+            }
+        }
+    }
+}
+```
+
+---
+
+# 4. Jenkins Scripted Pipeline
+
+```groovy
+node {
+
+    stage('Build') {
+        sh 'mvn clean package'
+    }
+
+    stage('Test') {
+        sh 'mvn test'
+    }
+
+    stage('Deploy') {
+        sh './deploy.sh'
+    }
+}
+```
+
+---
+
+# 5. Jenkins Agents
+
+### Master-Agent Connection Check
+
+```bash
+java -jar agent.jar \
+-jnlpUrl http://jenkins/computer/agent/slave-agent.jnlp \
+-secret xxxxx
+```
+
+---
+
+# 6. Maven Build Automation
+
+### Maven Build Script
+
+```bash
+#!/bin/bash
+
+mvn clean
+mvn compile
+mvn test
+mvn package
+```
+
+### Python Automation
+
+```python
+import os
+
+os.system("mvn clean package")
+```
+
+---
+
+# 7. SonarQube Integration
+
+### Jenkins Stage
+
+```groovy
+stage('SonarQube Scan') {
+    steps {
+        sh '''
+        mvn sonar:sonar \
+        -Dsonar.host.url=http://sonarqube:9000
+        '''
+    }
+}
+```
+
+### Bash
+
+```bash
+mvn sonar:sonar \
+-Dsonar.projectKey=myapp
+```
+
+---
+
+# 8. Sonar Quality Gate
+
+```groovy
+stage('Quality Gate') {
+    steps {
+        waitForQualityGate abortPipeline: true
+    }
+}
+```
+
+---
+
+# 9. Artifact Upload to AWS S3
+
+### Python
+
+```python
+import boto3
+
+s3 = boto3.client('s3')
+
+s3.upload_file(
+    'app.jar',
+    'my-artifacts',
+    'app.jar'
+)
+```
+
+### Bash
+
+```bash
+aws s3 cp app.jar \
+s3://my-artifacts/
+```
+
+---
+
+# 10. Artifact Deployment
+
+### Bash Script
+
+```bash
+#!/bin/bash
+
+aws s3 cp \
+s3://my-artifacts/app.jar .
+
+systemctl restart myapp
+```
+
+---
+
+# 11. Multi-Stage Pipeline
+
+```groovy
+pipeline {
+ agent any
+
+ stages {
+
+  stage('Build') {
+   steps {
+    sh 'mvn package'
+   }
+  }
+
+  stage('Scan') {
+   steps {
+    sh 'trivy image app'
+   }
+  }
+
+  stage('Deploy') {
+   steps {
+    sh './deploy.sh'
+   }
+  }
+ }
+}
+```
+
+---
+
+# 12. Parallel Execution Pipeline
+
+```groovy
+stage('Parallel Tests') {
+
+ parallel {
+
+  stage('Unit Test') {
+   steps {
+    sh 'pytest tests/'
+   }
+  }
+
+  stage('Integration Test') {
+   steps {
+    sh './integration.sh'
+   }
+  }
+ }
+}
+```
+
+---
+
+# 13. Terraform Infrastructure Pipeline
+
+### Bash
+
+```bash
+terraform init
+terraform validate
+terraform plan
+terraform apply -auto-approve
+```
+
+### Python
+
+```python
+import subprocess
+
+subprocess.run(["terraform","apply","-auto-approve"])
+```
+
+---
+
+# 14. Terraform AWS EC2
+
+```hcl
+resource "aws_instance" "web" {
+
+  ami           = "ami-12345"
+  instance_type = "t2.micro"
+
+}
+```
+
+---
+
+# 15. Automated Deployment Pipeline
+
+```groovy
+stage('Infrastructure Deploy') {
+
+ steps {
+  sh '''
+  terraform init
+  terraform apply -auto-approve
+  '''
+ }
+}
+```
+
+---
+
+# 16. Security Scanning Using Trivy
+
+```bash
+trivy image myapp:latest
+```
+
+### Jenkins Stage
+
+```groovy
+stage('Security Scan') {
+ steps {
+  sh 'trivy image myapp'
+ }
+}
+```
+
+---
+
+# 17. Compliance Checking
+
+### Bash
+
+```bash
+lynis audit system
+```
+
+### Python
+
+```python
+import os
+
+os.system("lynis audit system")
+```
+
+---
+
+# 18. Blue-Green Deployment
+
+### Bash
+
+```bash
+ACTIVE=$(cat active.txt)
+
+if [ "$ACTIVE" = "blue" ]
+then
+ echo "Deploying Green"
+else
+ echo "Deploying Blue"
+fi
+```
+
+---
+
+# 19. Canary Deployment
+
+### Kubernetes
+
+```bash
+kubectl apply -f canary.yaml
+```
+
+Traffic Example:
+
+```text
+90% -> Stable Version
+10% -> Canary Version
+```
+
+---
+
+# 20. Rolling Update Deployment
+
+### Kubernetes
+
+```bash
+kubectl set image deployment/app \
+app=myapp:v2
+```
+
+Check Status
+
+```bash
+kubectl rollout status deployment/app
+```
+
+Rollback
+
+```bash
+kubectl rollout undo deployment/app
+```
+
+---
+
+# Complete Interview Summary
+
+**English:**
+
+"I automated Linux and Windows administration using Python and Bash scripts,
+built Jenkins CI/CD pipelines integrated with Maven, SonarQube, Terraform, AWS S3, 
+and security scanning tools. I implemented artifact management, infrastructure provisioning,
+and deployment strategies including Blue-Green, Canary, and Rolling Updates for production workloads."
+
+**Hinglish:**
+
+"Maine Python aur Bash scripting se Linux-Windows administration automate kiya, 
+Jenkins CI/CD pipelines banayi jisme Maven, SonarQube, Terraform, AWS S3 aur security scanning tools 
+integrate kiye. Infrastructure provisioning, artifact management aur Blue-Green, Canary aur Rolling deployment
+strategies implement karke production workloads manage kiye."
