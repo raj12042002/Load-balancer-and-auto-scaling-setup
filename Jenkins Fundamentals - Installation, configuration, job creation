@@ -1,0 +1,1098 @@
+sudo apt update
+sudo apt install openjdk-17-y
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee\
+\usr\share\keyrings\jenkins-keyrings.asc> /dev/null
+
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+/etc/apt/sources.list.d/jenkins.list > /dev/null
+
+sudo apt update
+sudo apt install jenkins -y
+sudo systemctl start jenkins
+
+echo "Build Started"
+python app.py
+echo "Build Success"
+
+
+//groovy
+
+pipeline {
+ agent any 
+ stages  {
+   stage('Build') {
+    steps {
+       sh 'python app.py'
+           }
+                   }
+           }
+           }
+
+GitHub
+   ↓
+Jenkins
+   ↓
+Docker Build
+   ↓
+Testing
+   ↓
+AWS Deployment
+
+import boto3
+
+ec2 = boto3.client('ec2')
+
+response = ec2.describe_instances()
+
+print(response) // ec2_virtual_servers 
+
+import boto3
+
+s3 = boto3.client('s3')
+
+s3.upload_file(
+    'backup.zip',
+    'company-backups',
+    'backup.zip'
+) // s3_object_storage
+
+CREATE TABLE employees (
+ id INT,
+ name VARCHAR(50)
+);  // rds_managed_database
+
+{
+ "Version":"2012-10-17",
+ "Statement":[
+  {
+   "Effect":"Allow",
+   "Action":"s3:*",
+   "Resource":"*"
+  }
+ ]
+} // iam_
+
+def lambda_handler(event, context):
+
+    print("Hello Lambda")
+
+    return {
+      "statusCode":200
+    }
+
+Internet
+    ↓
+Public Subnet
+    ↓
+Private App Subnet
+    ↓
+Private Database Subnet
+
+import boto3
+
+cw = boto3.client('cloudwatch')
+
+cw.put_metric_data(
+ Namespace='Application',
+ MetricData=[
+   {
+     'MetricName':'CPU',
+     'Value':50
+   }
+ ]
+)
+
+app.company.com
+   →
+54.12.34.56
+
+import boto3
+
+sns = boto3.client('sns')
+
+sns.publish(
+ TopicArn='arn',
+ Message='Deployment Success'
+)
+import boto3
+
+sqs = boto3.client('sqs')
+
+sqs.send_message(
+ QueueUrl='url',
+ MessageBody='Order Created'
+)
+
+FROM python:3.11
+
+WORKDIR /app
+
+COPY . .
+
+RUN pip install -r requirements.txt
+
+CMD ["python","app.py"]
+docker build -t app:v1 .
+
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: webapp
+
+spec:
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: webapp
+
+  template:
+    metadata:
+      labels:
+        app: webapp
+
+    spec:
+      containers:
+      - name: app
+        image: app:v1
+
+provider "aws" {
+ region = "us-east-1"
+}
+
+resource "aws_instance" "web" {
+
+ ami = "ami-123"
+
+ instance_type = "t2.micro"
+
+}
+
+
+terraform init
+
+terraform plan
+
+terraform apply
+
+[web]
+
+10.0.0.10
+10.0.0.11
+
+---
+- hosts: web
+
+  tasks:
+
+  - name: Install Nginx
+
+    yum:
+      name: nginx
+      state: present
+
+ansible-playbook nginx.yml
+package 'httpd' do
+ action :install
+end
+
+package { 'nginx':
+ ensure => installed,
+}
+
+with open("app.log") as f:
+
+    for line in f:
+
+        if "ERROR" in line:
+
+            print(line)
+
+#!/bin/bash
+
+tar -czf backup.tar.gz /data
+
+aws s3 cp backup.tar.gz s3://backup
+
+Get-Service
+
+Restart-Service Spooler
+
+const express = require('express')
+
+const app = express()
+
+app.get('/',(req,res)=>{
+ res.send("Hello")
+})
+
+app.listen(3000)
+
+
+SELECT *
+FROM employees
+WHERE department='IT';
+scrape_configs:
+
+- job_name: app
+
+  static_configs:
+
+  - targets:
+    - localhost:8080
+CPU Usage
+Memory Usage
+Disk Usage
+Network Traffic
+
+{
+ "level":"ERROR",
+ "message":"Database Down"
+}
+
+yum install zabbix-agent
+
+git clone repo
+
+git checkout -b feature
+
+git add .
+
+git commit -m "feature"
+
+git push
+
+Developer
+    ↓
+GitHub
+    ↓
+Jenkins
+    ↓
+Docker Build
+    ↓
+SonarQube Scan
+    ↓
+Terraform
+    ↓
+AWS EKS
+    ↓
+Kubernetes Deploy
+    ↓
+Prometheus
+    ↓
+Grafana
+
+This skill set covers a complete **DevOps Engineer / Cloud Engineer / System Administrator** role. Below is a practical explanation of each technology, along with real-world projects and code examples that you can discuss in interviews.
+
+---
+
+# 1. Jenkins Fundamentals
+
+## What is Jenkins?
+
+**English:** Jenkins is an automation server used to build, test, and deploy applications automatically.
+
+**Hinglish:** Jenkins ek automation tool hai jo code ko build, test aur deploy automatically karta hai.
+
+---
+
+## Jenkins Installation (Ubuntu)
+
+```bash
+sudo apt update
+
+sudo apt install openjdk-17-jdk -y
+
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
+/usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+/etc/apt/sources.list.d/jenkins.list > /dev/null
+
+sudo apt update
+
+sudo apt install jenkins -y
+
+sudo systemctl start jenkins
+```
+
+---
+
+## Jenkins Job Creation
+
+### Freestyle Job
+
+```bash
+echo "Build Started"
+
+python app.py
+
+echo "Build Success"
+```
+
+### Pipeline Job
+
+```groovy
+pipeline {
+
+ agent any
+
+ stages {
+
+  stage('Build') {
+   steps {
+    sh 'python app.py'
+   }
+  }
+
+ }
+}
+```
+
+---
+
+# Project: Automated CI/CD Pipeline
+
+### Scenario
+
+Developer pushes code to GitHub.
+
+### Flow
+
+```text
+GitHub
+   ↓
+Jenkins
+   ↓
+Docker Build
+   ↓
+Testing
+   ↓
+AWS Deployment
+```
+
+---
+
+# 2. AWS Services
+
+## EC2
+
+### Purpose
+
+Virtual server in cloud.
+
+### Python Example
+
+```python
+import boto3
+
+ec2 = boto3.client('ec2')
+
+response = ec2.describe_instances()
+
+print(response)
+```
+
+### Project
+
+Deploy Java Application on EC2.
+
+---
+
+## S3
+
+### Purpose
+
+Object storage.
+
+### Upload File
+
+```python
+import boto3
+
+s3 = boto3.client('s3')
+
+s3.upload_file(
+    'backup.zip',
+    'company-backups',
+    'backup.zip'
+)
+```
+
+### Project
+
+Store application artifacts and backups.
+
+---
+
+## RDS
+
+### Purpose
+
+Managed Database.
+
+### SQL
+
+```sql
+CREATE TABLE employees (
+ id INT,
+ name VARCHAR(50)
+);
+```
+
+### Project
+
+Store application user data.
+
+---
+
+## IAM
+
+### Purpose
+
+Access Management.
+
+### Example Policy
+
+```json
+{
+ "Version":"2012-10-17",
+ "Statement":[
+  {
+   "Effect":"Allow",
+   "Action":"s3:*",
+   "Resource":"*"
+  }
+ ]
+}
+```
+
+---
+
+## Lambda
+
+### Python Lambda
+
+```python
+def lambda_handler(event, context):
+
+    print("Hello Lambda")
+
+    return {
+      "statusCode":200
+    }
+```
+
+### Project
+
+Auto image processing when uploaded to S3.
+
+---
+
+## VPC
+
+### Purpose
+
+Private Network in AWS.
+
+### Project
+
+3-Tier Architecture
+
+```text
+Internet
+    ↓
+Public Subnet
+    ↓
+Private App Subnet
+    ↓
+Private Database Subnet
+```
+
+---
+
+## CloudWatch
+
+### Custom Metric
+
+```python
+import boto3
+
+cw = boto3.client('cloudwatch')
+
+cw.put_metric_data(
+ Namespace='Application',
+ MetricData=[
+   {
+     'MetricName':'CPU',
+     'Value':50
+   }
+ ]
+)
+```
+
+---
+
+## Route53
+
+### DNS Record
+
+```text
+app.company.com
+   →
+54.12.34.56
+```
+
+---
+
+## SNS
+
+### Notification
+
+```python
+import boto3
+
+sns = boto3.client('sns')
+
+sns.publish(
+ TopicArn='arn',
+ Message='Deployment Success'
+)
+```
+
+---
+
+## SQS
+
+### Queue Example
+
+```python
+import boto3
+
+sqs = boto3.client('sqs')
+
+sqs.send_message(
+ QueueUrl='url',
+ MessageBody='Order Created'
+)
+```
+
+---
+
+# 3. Docker
+
+## Dockerfile
+
+```dockerfile
+FROM python:3.11
+
+WORKDIR /app
+
+COPY . .
+
+RUN pip install -r requirements.txt
+
+CMD ["python","app.py"]
+```
+
+---
+
+## Build
+
+```bash
+docker build -t app:v1 .
+```
+
+---
+
+## Run
+
+```bash
+docker run -d app:v1
+```
+
+---
+
+# Project
+
+Containerized Flask Application.
+
+---
+
+# 4. Kubernetes
+
+## Deployment
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: webapp
+
+spec:
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: webapp
+
+  template:
+    metadata:
+      labels:
+        app: webapp
+
+    spec:
+      containers:
+      - name: app
+        image: app:v1
+```
+
+---
+
+## Apply
+
+```bash
+kubectl apply -f deploy.yaml
+```
+
+---
+
+# Project
+
+Microservices Deployment on EKS.
+
+---
+
+# 5. Terraform
+
+## EC2 Creation
+
+```hcl
+provider "aws" {
+ region = "us-east-1"
+}
+
+resource "aws_instance" "web" {
+
+ ami = "ami-123"
+
+ instance_type = "t2.micro"
+
+}
+```
+
+---
+
+## Commands
+
+```bash
+terraform init
+
+terraform plan
+
+terraform apply
+```
+
+---
+
+# Project
+
+Provision Complete AWS Infrastructure.
+
+---
+
+# 6. Ansible
+
+## Inventory
+
+```ini
+[web]
+
+10.0.0.10
+10.0.0.11
+```
+
+---
+
+## Playbook
+
+```yaml
+---
+- hosts: web
+
+  tasks:
+
+  - name: Install Nginx
+
+    yum:
+      name: nginx
+      state: present
+```
+
+---
+
+## Run
+
+```bash
+ansible-playbook nginx.yml
+```
+
+---
+
+# Project
+
+Configure 100 Linux Servers.
+
+---
+
+# 7. Chef
+
+## Recipe
+
+```ruby
+package 'httpd' do
+ action :install
+end
+```
+
+---
+
+# Project
+
+Automated Apache Installation.
+
+---
+
+# 8. Puppet
+
+## Manifest
+
+```puppet
+package { 'nginx':
+ ensure => installed,
+}
+```
+
+---
+
+# Project
+
+Enterprise Server Configuration Management.
+
+---
+
+# 9. Python Automation
+
+## Log Monitoring
+
+```python
+with open("app.log") as f:
+
+    for line in f:
+
+        if "ERROR" in line:
+
+            print(line)
+```
+
+---
+
+# Project
+
+Automated Incident Detection.
+
+---
+
+# 10. Bash Scripting
+
+## Backup Script
+
+```bash
+#!/bin/bash
+
+tar -czf backup.tar.gz /data
+
+aws s3 cp backup.tar.gz s3://backup
+```
+
+---
+
+# Project
+
+Nightly Backup Automation.
+
+---
+
+# 11. PowerShell
+
+## Windows Service Monitoring
+
+```powershell
+Get-Service
+
+Restart-Service Spooler
+```
+
+---
+
+# Project
+
+Windows Patch Automation.
+
+---
+
+# 12. JavaScript (Node.js)
+
+## API Server
+
+```javascript
+const express = require('express')
+
+const app = express()
+
+app.get('/',(req,res)=>{
+ res.send("Hello")
+})
+
+app.listen(3000)
+```
+
+---
+
+# Project
+
+REST API Deployment.
+
+---
+
+# 13. SQL
+
+## Query
+
+```sql
+SELECT *
+FROM employees
+WHERE department='IT';
+```
+
+---
+
+# Project
+
+Reporting Dashboard.
+
+---
+
+# 14. Prometheus
+
+## Scrape Config
+
+```yaml
+scrape_configs:
+
+- job_name: app
+
+  static_configs:
+
+  - targets:
+    - localhost:8080
+```
+
+---
+
+# Project
+
+Infrastructure Monitoring.
+
+---
+
+# 15. Grafana
+
+## Dashboard Metrics
+
+```text
+CPU Usage
+Memory Usage
+Disk Usage
+Network Traffic
+```
+
+---
+
+# Project
+
+Executive Monitoring Dashboard.
+
+---
+
+# 16. ELK Stack
+
+### Elasticsearch
+
+Store logs.
+
+### Logstash
+
+Process logs.
+
+### Kibana
+
+Visualize logs.
+
+---
+
+# Log Example
+
+```json
+{
+ "level":"ERROR",
+ "message":"Database Down"
+}
+```
+
+---
+
+# Project
+
+Centralized Logging Platform.
+
+---
+
+# 17. Zabbix
+
+## Agent Installation
+
+```bash
+yum install zabbix-agent
+```
+
+---
+
+# Project
+
+Server Health Monitoring.
+
+---
+
+# 18. Linux Administration
+
+### Check CPU
+
+```bash
+top
+```
+
+### Memory
+
+```bash
+free -m
+```
+
+### Disk
+
+```bash
+df -h
+```
+
+---
+
+# Project
+
+Managed 200+ Linux Servers.
+
+---
+
+# 19. Git & GitHub
+
+## Workflow
+
+```bash
+git clone repo
+
+git checkout -b feature
+
+git add .
+
+git commit -m "feature"
+
+git push
+```
+
+---
+
+# Project
+
+Version Control for CI/CD Pipelines.
+
+---
+
+# 20. VMware ESXi & Hyper-V
+
+### Create VM
+
+```text
+CPU = 4
+RAM = 8GB
+Disk = 100GB
+```
+
+### Project
+
+Hosted 100+ Virtual Machines.
+
+---
+
+# End-to-End Enterprise Project
+
+### CI/CD + AWS + Kubernetes
+
+```text
+Developer
+    ↓
+GitHub
+    ↓
+Jenkins
+    ↓
+Docker Build
+    ↓
+SonarQube Scan
+    ↓
+Terraform
+    ↓
+AWS EKS
+    ↓
+Kubernetes Deploy
+    ↓
+Prometheus
+    ↓
+Grafana
+```
+
+### Interview Summary (English)
+
+"I designed and managed enterprise DevOps platforms using AWS, Docker, Kubernetes, Jenkins, Terraform, Ansible, Python, Bash, PowerShell, Prometheus, Grafana, ELK, VMware, and Git. I automated infrastructure provisioning, CI/CD pipelines, monitoring, security, and deployment processes for highly available production environments."
+
+### Interview Summary (Hinglish)
+
+"Maine AWS, Docker, Kubernetes, Jenkins, Terraform, Ansible, Python, Bash, PowerShell, Prometheus, Grafana, ELK, VMware aur Git ka use karke enterprise DevOps platforms manage kiye. Infrastructure provisioning, CI/CD automation, monitoring, security aur deployment processes automate karke high-availability production environments maintain kiye."
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
